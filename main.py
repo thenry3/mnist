@@ -11,4 +11,4 @@ class MnistNet(nn.Module):
 
 x = np.random.rand(2, 3, 4)
 print(x)
-print(x[1, : , 3])
+print(x[1, : , 2])
