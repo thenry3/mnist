@@ -27,8 +27,6 @@ class MnistNet(nn.Module):
         x = torch.flatten(x, 1)
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
-        # out = F.log_softmax(x, dim=1)
-        # print(x)
         return x
 
 def train(epoch, model, trainloader, optimizer):
