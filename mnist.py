@@ -9,13 +9,14 @@ import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
 class MnistNet(nn.Module):
     def __init__(self):
         super(MnistNet, self).__init__()
 
         self.conv1 = nn.Conv2d(1, 32, 3)
         self.conv2 = nn.Conv2d(32, 64, 3)
-        
+
         self.fc1 = nn.Linear(1600, 32)
         self.fc2 = nn.Linear(32, 10)
 
@@ -28,6 +29,7 @@ class MnistNet(nn.Module):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return x
+
 
 def train(epoch, model, trainloader, optimizer):
     model.train()
@@ -43,8 +45,10 @@ def train(epoch, model, trainloader, optimizer):
 
         running_loss += loss.item()
         if i % 2000 == 1999:
-            print('epoch: %d | batch: %d loss: %.3f' % (epoch, i + 1, running_loss / 2000))
+            print('epoch: %d | batch: %d loss: %.3f' %
+                  (epoch, i + 1, running_loss / 2000))
             running_loss = 0.0
+
 
 def test(model, testloader):
     model.eval()
@@ -61,23 +65,25 @@ def test(model, testloader):
 
     print("\n--TEST--")
     print('Average Loss: %.4f' % (loss))
-    print("Accuracy: %d / %d --> %f%%" % (correct, len(testloader.dataset), 100.0 * correct / len(testloader.dataset)))
+    print("Accuracy: %d / %d --> %f%%" % (correct,
+                                          len(testloader.dataset), 100.0 * correct / len(testloader.dataset)))
 
 
 if __name__ == "__main__":
-    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+    transform = transforms.Compose(
+        [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
     dataparams = {"batch_size": 4, "shuffle": True, "num_workers": 2}
 
-    trainset = torchvision.datasets.MNIST(root="./data", 
-                                        train=True, 
-                                        download=True, 
-                                        transform=transform)
+    trainset = torchvision.datasets.MNIST(root="./data",
+                                          train=True,
+                                          download=True,
+                                          transform=transform)
     trainloader = data.DataLoader(trainset, **dataparams)
 
-    testset = torchvision.datasets.MNIST(root="./data", 
-                                        train=False, 
-                                        download=True, 
-                                        transform=transform)
+    testset = torchvision.datasets.MNIST(root="./data",
+                                         train=False,
+                                         download=True,
+                                         transform=transform)
     testloader = data.DataLoader(testset, **dataparams)
 
     model = MnistNet().to(device)
@@ -92,7 +98,4 @@ if __name__ == "__main__":
     test(model, testloader)
 
     torch.save(model.state_dict(), "mnist_cnn.pt")
-
-
-
 

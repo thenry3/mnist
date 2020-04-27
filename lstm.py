@@ -18,7 +18,7 @@ def lstm(n, l, c, d):
     given = torch.randn(l, n, c)
     hidden = (torch.randn(4, n, d//2), torch.randn(4, n, d//2))
     output, hidden = lstm(given, hidden)
-    return torch.stack([output[:, i] for i in range(n)])
+    return output.transpose(0, 1)
 
 
 # print(do_lstm(4, 5, 5, 10))
